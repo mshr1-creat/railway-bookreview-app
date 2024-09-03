@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useState } from 'react';
-import './App.css';
+import './src/App.css';
 
 function App() {
   const [errors, setErrors] = useState({ email: '', password: '' });
