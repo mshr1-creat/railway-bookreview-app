@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Navigate } from 'react-router-dom';
-import Compressor from 'compressorjs';
+import Compressor from 'compressorjs'; // Compressor を使用して画像のリサイズを行う
 import { signInAction } from '../authSlice';
 import { Header } from '../components/Header';
 import { url } from '../const';
@@ -32,13 +32,15 @@ export const SignUp = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    // Compressor を使用して画像のリサイズを行う
     if (file) {
       new Compressor(file, {
         quality: 0.8,
         success(result) {
           setProfilePicture(result);
         },
-        error(err) {
+        error(err) { // err の型を明示
+          console.error('Error during image compression:', err); // エラーをログ出力
           setErrorMessage('画像の圧縮に失敗しました。');
         },
       });
@@ -62,7 +64,7 @@ export const SignUp = () => {
     try {
       const res = await axios.post(`${url}/users`, data);
       const token = res.data.token;
-      dispatch(signIn());
+      dispatch(signInAction());
       setCookie('token', token);
       navigate('/');
     } catch (err) {

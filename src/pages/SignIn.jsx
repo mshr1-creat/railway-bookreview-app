@@ -35,13 +35,15 @@ export const SignIn = () => {
     }
 
     axios
-      .post(`${url}/login`, { email: email, password: password })
+      .post(`${url}/signin`, { email: email, password: password }) // signinをloginに修正
       .then((res) => {
+        console.log('Token received:', res.data.token); // ここでトークンが正しく取得できているか確認
         setCookie('token', res.data.token); // クッキーにトークンを設定
         dispatch(signInAction()); // アクションをディスパッチ
         navigate('/');
       })
       .catch((err) => {
+        console.error('Error during sign in:', err.message); // エラーメッセージの表示
         setErrorMessage(`サインインに失敗しました。${err.message}`);
       });
   };
