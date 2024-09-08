@@ -1,6 +1,6 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser'); // リクエストボディを解析するためのミドルウェア
 
 const app = express();
 
@@ -16,12 +16,30 @@ app.use(
 // プリフライトリクエストへの対応
 app.options('*', cors());
 
-// ルートや他のミドルウェアの設定
+// リクエストボディの解析
+app.use(bodyParser.json()); // JSONボディを解析する
+
+// ユーザーサインアップエンドポイント
 app.post('/users', (req, res) => {
-  // サインアップ処理
-  res.send('サインアップ成功');
+  try {
+    const userData = req.body;
+
+    // データの検証
+    if (!userData.email || !userData.password) {
+      return res.status(400).send('メールアドレスとパスワードが必要です');
+    }
+
+    // サインアップ処理の仮実装（ここにサインアップ処理を追加）
+    // ...
+
+    res.status(200).send('サインアップ成功');
+  } catch (error) {
+    console.error('サーバーエラー:', error);
+    res.status(500).send('サーバーエラー');
+  }
 });
 
+// サーバー起動
 app.listen(5000, () => {
   console.log('サーバーがポート5000で起動しています');
 });
