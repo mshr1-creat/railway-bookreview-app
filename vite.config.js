@@ -10,4 +10,11 @@ export default defineConfig({
   define: {
     'process.env': {},
   },
+  proxy: {
+    '/api': {
+      target: 'https://railway.bookreview.techtrain.dev',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, ''),
+    },
+  },
 });
