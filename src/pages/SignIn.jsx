@@ -9,8 +9,8 @@ import { signInAction } from '../authSlice';
 import { url } from '../const';
 
 export const SignIn = () => {
-  const auth = useSelector((state) => state.auth.isSignIn);
-  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth.isSignIn); // •	Reduxのauth状態から、ユーザーがサインインしているかどうか（isSignIn）を取得
+  const dispatch = useDispatch(); // サインイン成功時にsignInActionを呼び出して、ユーザーの認証状態を更新する
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +21,7 @@ export const SignIn = () => {
     if (auth) {
       navigate('/');
     }
-  }, [auth, navigate]);
+  }, [auth, navigate]); // authの状態が変更されたときに再実行される
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -38,8 +38,8 @@ export const SignIn = () => {
       .post(`${url}/signin`, { email: email, password: password }) // signinをloginに修正
       .then((res) => {
         console.log('Token received:', res.data.token); // ここでトークンが正しく取得できているか確認
-        setCookie('token', res.data.token); // クッキーにトークンを設定
-        dispatch(signInAction()); // アクションをディスパッチ
+        setCookie('token', res.data.token); // クッキーにトークンを設定 成功すると、res.data.tokenにJWTトークンが含まれており、それをクッキーに保存する
+        dispatch(signInAction()); // dispatch(signInAction())でReduxの認証状態を更新し、navigate('/')でトップページにリダイレクトする
         navigate('/');
       })
       .catch((err) => {
