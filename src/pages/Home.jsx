@@ -7,14 +7,15 @@ import { url } from '../const';
 import './bookReviews.scss'; // BEMのクラス設計に基づいたCSS
 
 export const Home = () => {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState([]); // 書籍レビューのデータを保持する状態 初期値は空の配列を設定
   const [errorMessage, setErrorMessage] = useState('');
-  const [cookies] = useCookies();
+  const [cookies] = useCookies(); // クッキーからトークンを取得する cookies.token にトークンが保存されている
 
+  // コンポーネントがレンダリングされた際に一度だけ実行される
   useEffect(() => {
     // 取得したトークンをログに表示して確認する
     console.log('Token from cookies:', cookies.token);
-    console.log('Token from localStorage:', localStorage.getItem('token'));
+    console.log('Token from localStorage:', localStorage.getItem('token')); // JWTトークンのフォーマット（3つのセグメントに分かれているか）を確認
 
     // トークンが正しい形式か確認
     if (cookies.token && cookies.token.split('.').length !== 3) {
