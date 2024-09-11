@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Header } from '../components/Header';
 import BookList from '../components/BookList';
-import Pagination from '../components/Pagination';
+import Pagination from '../components/Pagination'; // ページ遷移用の機能
 import { url } from '../const';
 import './bookReviews.scss'; // BEMのクラス設計に基づいたCSS
 
@@ -47,7 +47,7 @@ export const Home = () => {
       .then((res) => {
         console.log('API response data:', res.data); // 取得したデータを確認
         setBooks(res.data.slice(0, itemsPerPage)); // 現在のページのデータを設定
-        setHasNextPage(res.data.length > itemsPerPage); // 次のページがあるかを判定
+        setHasNextPage(res.data.length === itemsPerPage); // 次のページがあるかを判定
       })
       .catch((err) => {
         setErrorMessage(`書籍レビューの取得に失敗しました。${err.message}`);

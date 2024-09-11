@@ -1,6 +1,7 @@
 // BookList.jsx
 import React from 'react';
 import '../pages/bookReviews.scss'; // BEMのクラス設計に基づいたCSS
+import PropTypes from 'prop-types';
 
 const BookList = ({ books }) => {
   return (
@@ -16,6 +17,11 @@ const BookList = ({ books }) => {
       ))}
     </ul>
   );
+};
+
+// PropTypesを追加
+BookList.propTypes = {
+  books: PropTypes.number.isRequired,
 };
 
 export default BookList;
