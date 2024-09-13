@@ -21,7 +21,7 @@ const BookList = ({ books }) => {
 
 // PropTypesを追加
 BookList.propTypes = {
-  books: PropTypes.number.isRequired,
+  books: PropTypes.array.isRequired,
 };
 
 export default BookList;
