@@ -18,13 +18,17 @@ export const SignUp = () => {
   const [password, setPassword] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [, setCookie] = useCookies();
+  const [cookies, setCookie] = useCookies();
+  const [iconUrl, setIconUrl] = useState(null); // アップロードされた画像のURLを保存する状態
 
   useEffect(() => {
+    // トークンが取得されているか確認
+    console.log('Token from cookies:', cookies.token);
+
     if (auth) {
       navigate('/');
     }
-  }, [auth, navigate]);
+  }, [auth, navigate, cookies.token]);
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handleNameChange = (e) => setName(e.target.value);
@@ -35,11 +39,12 @@ export const SignUp = () => {
     // Compressor を使用して画像のリサイズを行う
     if (file) {
       new Compressor(file, {
-        quality: 0.8,
+        quality: 0.5,
         success(result) {
           setProfilePicture(result);
         },
-        error(err) { // err の型を明示
+        error(err) {
+          // err の型を明示
           console.error('Error during image compression:', err); // エラーをログ出力
           setErrorMessage('画像の圧縮に失敗しました。');
         },
@@ -47,25 +52,68 @@ export const SignUp = () => {
     }
   };
 
+  // プロフィール画像のアップロード
+  const uploadProfilePicture = async () => {
+    if (!cookies.token) {
+      setErrorMessage('認証トークンが見つかりません。');
+      return null;
+    }
+
+    if (!profilePicture) return null;
+
+    const formData = new FormData();
+    formData.append('icon', profilePicture);
+
+    try {
+      const res = await axios.post(`${url}/uploads`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${cookies.token}`, // トークンを追加
+        },
+      });
+      return res.data.iconUrl; // アップロードした画像のURLを取得
+    } catch (err) {
+      setErrorMessage(`画像のアップロードに失敗しました。 ${err.message}`);
+      return null;
+    }
+  };
+
   const onSignUp = async () => {
+    // // トークンが存在するかチェック
+    // if (!cookies.token) {
+    //   setErrorMessage('認証トークンが見つかりません。');
+    //   return;
+    // }
+
     if (!email || !name || !password) {
       setErrorMessage('全てのフィールドを入力してください。');
       return;
     }
 
-    const data = new FormData();
-    data.append('email', email);
-    data.append('name', name);
-    data.append('password', password);
-    if (profilePicture) {
-      data.append('profilePicture', profilePicture);
+    // プロフィール画像をアップロード
+    const uploadedIconUrl = await uploadProfilePicture();
+
+    if (uploadedIconUrl) {
+      // アップロードに成功した場合、URLをトークンとして保存
+      setIconUrl(uploadedIconUrl);
+      setCookie('iconToken', uploadedIconUrl, { path: '/' });
+    } else {
+      setErrorMessage('プロフィール画像のアップロードに失敗しました。');
+      return;
     }
+
+    const data = {
+      email,
+      name,
+      password,
+      iconUrl: uploadedIconUrl, // アップロードされた画像URLをサインアップデータとして送信
+    };
 
     try {
       const res = await axios.post(`${url}/users`, data);
       const token = res.data.token;
+      setCookie('token', token, { path: '/' }); // path を設定
       dispatch(signInAction());
-      setCookie('token', token);
       navigate('/');
     } catch (err) {
       setErrorMessage(`サインアップに失敗しました。 ${err.message}`);
