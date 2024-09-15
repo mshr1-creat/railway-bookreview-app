@@ -83,5 +83,6 @@
     "moduleNameMapper": {
       "src(.*)$": "<rootDir>/src/App.jsx"
     }
-  }
+  },
+  "proxy": "https://railway.bookreview.techtrain.dev"
 }
