@@ -11,15 +11,16 @@ import './signUp.scss';
 
 export const SignUp = () => {
   const navigate = useNavigate();
-  const auth = useSelector((state) => state.auth.isSignIn);
-  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth.isSignIn); // Reduxストアからユーザーのサインイン状態を取得する
+  const dispatch = useDispatch(); // Reduxのアクションをディスパッチするための関数を取得する
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [cookie, setCookie] = useCookies();
+  const [, setCookie] = useCookies();
 
+  // ユーザーが既にサインインしている場合、ホームページ（'/'）にリダイレクトする
   useEffect(() => {
     if (auth) {
       navigate('/');
@@ -62,7 +63,7 @@ export const SignUp = () => {
     };
 
     try {
-      // ユーザーをサインアップ
+      // サーバにユーザー情報を送信し、サインアップする
       await axios.post(`${url}/users`, data);
 
       // サインインしてトークンを取得
@@ -72,18 +73,18 @@ export const SignUp = () => {
       });
       const token = signInRes.data.token;
       setCookie('token', token, { path: '/' });
-      dispatch(signInAction());
+      dispatch(signInAction()); // ユーザーがサインインした状態であることをReduxストアに通知する
 
       if (profilePicture) {
         const formData = new FormData();
-        formData.append('icon', profilePicture);
+        formData.append('icon', profilePicture); // 画像ファイルを icon フィールドとしてフォームデータに追加する
 
         try {
-          // プロフィール画像をアップロード
+          // プロフィール画像をサーバにアップロード
           await axios.post(`${url}/uploads`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`, // 認証トークンをヘッダーに含める
             },
           });
 
