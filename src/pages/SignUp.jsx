@@ -74,32 +74,29 @@ export const SignUp = () => {
       setCookie('token', token, { path: '/' });
       dispatch(signInAction());
 
-      let iconUrl = null;
-
       if (profilePicture) {
         const formData = new FormData();
         formData.append('icon', profilePicture);
 
         try {
           // プロフィール画像をアップロード
-          const uploadRes = await axios.post(`${url}/uploads`, formData, {
+          await axios.post(`${url}/uploads`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${token}`,
             },
           });
-          iconUrl = uploadRes.data.iconUrl;
 
-          // ユーザー情報を更新
-          await axios.put(
-            `${url}/users/me`,
-            { iconUrl },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          // ユーザー情報を取得して iconUrl を確認
+          const userRes = await axios.get(`${url}/users`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const iconUrl = userRes.data.iconUrl;
+
+          // 必要であれば、iconUrl をアプリケーション内で使用
+          console.log('Icon URL:', iconUrl);
         } catch (uploadErr) {
           setErrorMessage(
             `画像のアップロードに失敗しました。 ${uploadErr.message}`
