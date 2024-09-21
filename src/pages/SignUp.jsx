@@ -18,7 +18,7 @@ export const SignUp = () => {
   const [password, setPassword] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [, setCookie] = useCookies();
+  const [, setCookie] = useCookies(['token', 'username']);
 
   // ユーザーが既にサインインしている場合、ホームページ（'/'）にリダイレクトする
   useEffect(() => {
@@ -73,7 +73,16 @@ export const SignUp = () => {
       });
       const token = signInRes.data.token;
       setCookie('token', token, { path: '/' });
-      dispatch(signInAction()); // ユーザーがサインインした状態であることをReduxストアに通知する
+
+      // トークンを使ってユーザ名を取得
+      const userRes = await axios.get(`${url}/users`, {
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const username = userRes.data.username; // ユーザー名を取得
+      setCookie('username', username, { path: '/' }); // クッキーに保存
+      dispatch(signInAction({ username })); // ユーザーがサインインした状態であることをReduxストアに通知する  Reduxに保存
 
       if (profilePicture) {
         const formData = new FormData();

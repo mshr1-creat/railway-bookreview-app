@@ -7,22 +7,32 @@ import './header.scss';
 
 export const Header = () => {
   const auth = useSelector((state) => state.auth.isSignIn);
+  const username = useSelector((state) => state.auth.username); // Reduxから取得
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [, , removeCookie] = useCookies(); //cookies, setCookieは現時点では使用しない
+  const [, , removeCookie] = useCookies(['token', 'username']);
+
   const handleSignOut = () => {
     dispatch(signOut());
     removeCookie('token');
+    removeCookie('username');
     navigate('/signin');
   };
+
+  // デバッグ用のログ出力
+  console.log('Auth:', auth);
+  console.log('Username:', username);
 
   return (
     <header className="header">
       <h1>書籍レビュー</h1>
       {auth ? (
-        <button onClick={handleSignOut} className="sign-out-button">
-          サインアウト
-        </button>
+        <div className="header__user-info">
+          {username && <p className="header__user">ようこそ、{username}さん</p>}
+          <button onClick={handleSignOut} className="sign-out-button">
+            サインアウト
+          </button>
+        </div>
       ) : (
         <></>
       )}
