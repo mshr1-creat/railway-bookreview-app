@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from '../authSlice';
+import { signInAction, signOut } from '../authSlice';
 import './header.scss';
 
 export const Header = () => {
@@ -10,7 +10,7 @@ export const Header = () => {
   const username = useSelector((state) => state.auth.username); // Reduxから取得
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [, , removeCookie] = useCookies(['token', 'username']);
+  const [cookies, , removeCookie] = useCookies(['token', 'username']);
 
   const handleSignOut = () => {
     dispatch(signOut());
@@ -22,6 +22,13 @@ export const Header = () => {
   // デバッグ用のログ出力
   console.log('Auth:', auth);
   console.log('Username:', username);
+
+  // ページリロード時にクッキーから認証情報を読み込み、Reduxの状態を更新
+  useEffect(() => {
+    if (!auth && cookies.token && cookies.username) {
+      dispatch(signInAction({ username: cookies.username }));
+    }
+  }, [auth, cookies.token, cookies.username, dispatch]);
 
   return (
     <header className="header">
