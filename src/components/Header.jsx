@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { signInAction, signOut } from '../authSlice';
 import './header.scss';
 

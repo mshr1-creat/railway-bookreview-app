@@ -9,8 +9,25 @@
   justify-content: space-between;
 }
 
+.header {
+  &__user {
+    font-size: 16px;
+    padding: 2px 2px;
+  }
+}
+
 .sign-out-button {
-  color: #ffffff;
-  margin: auto 25px auto auto;
+  display: inline-block;
+  padding: 8px 8px;
+  background-color: #007bff; /* ボタンの背景色 */
+  color: #fff; /* ボタンの文字色 */
+  text-decoration: none; /* テキストの下線を消す */
+  border-radius: 4px; /* 角を丸くする */
+  transition: background-color 0.3s;
+  font-size: 8px;
+}
+
+.login-button:hover {
+  background-color: #0056b3; /* ホバー時の背景色 */
 }
 
