@@ -32,10 +32,14 @@ export const Header = () => {
 
   return (
     <header className="header">
-      <h1>書籍レビュー</h1>
+      <h1 className="header__name">書籍レビュー</h1>
       {auth ? (
         <div className="header__user-info">
-          {username && <p className="header__user">ようこそ、{username}さん</p>}
+          {username && (
+            <p className="header__user">
+              ようこそ、<Link to="/profile">{username}</Link>さん
+            </p>
+          )}
           <button onClick={handleSignOut} className="sign-out-button">
             サインアウト
           </button>

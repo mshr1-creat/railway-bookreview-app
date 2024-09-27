@@ -6,6 +6,7 @@ import { Navigate } from 'react-router-dom';
 import { Home } from '../pages/Home';
 import { SignUp } from '../pages/SignUp';
 import { SignIn } from '../pages/SignIn';
+import { Profile } from '../pages/Profile';
 
 export const Router = () => {
   return (
@@ -16,6 +17,7 @@ export const Router = () => {
           <Route path="/login" element={<SignIn />} />
           <Route path="/" element={<Home />} />
           <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </Provider>

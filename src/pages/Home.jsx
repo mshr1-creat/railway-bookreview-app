@@ -7,7 +7,7 @@ import BookList from '../components/BookList';
 import Pagination from '../components/Pagination'; // ページ遷移用の機能
 import { url } from '../const';
 import './bookReviews.scss'; // BEMのクラス設計に基づいたCSS
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
   const [books, setBooks] = useState([]); // 書籍レビューのデータを保持する状態 初期値は空の配列を設定
