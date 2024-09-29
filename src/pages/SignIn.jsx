@@ -40,7 +40,7 @@ export const SignIn = () => {
       .then((res) => {
         const token = res.data.token;
         setCookie('token', token);
-        console.log('Token received:', res.data.token); // ここでトークンが正しく取得できているか確認
+        // console.log('Token received:', res.data.token); // ここでトークンが正しく取得できているか確認
 
         // トークンを使ってユーザー名を取得
         axios
@@ -50,7 +50,7 @@ export const SignIn = () => {
             },
           })
           .then((userRes) => {
-            console.log('User response:', userRes.data); // デバッグ用ログ
+            // console.log('User response:', userRes.data); // デバッグ用ログ
             const username = userRes.data.name;
             setCookie('username', username);
             // Reduxの認証状態を更新

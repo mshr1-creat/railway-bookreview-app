@@ -20,8 +20,8 @@ export const Header = () => {
   };
 
   // デバッグ用のログ出力
-  console.log('Auth:', auth);
-  console.log('Username:', username);
+  // console.log('Auth:', auth);
+  // console.log('Username:', username);
 
   // ページリロード時にクッキーから認証情報を読み込み、Reduxの状態を更新
   useEffect(() => {
@@ -46,6 +46,11 @@ export const Header = () => {
         </div>
       ) : (
         <></>
+      )}
+      {!cookies.token && (
+        <div className="new-review-link">
+          <Link to="/login">ログイン</Link>
+        </div>
       )}
     </header>
   );
