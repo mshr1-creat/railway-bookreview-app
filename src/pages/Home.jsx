@@ -13,9 +13,34 @@ export const Home = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [currentPage, setCurrentPage] = useState(1); // 現在のページ
   const [hasNextPage, setHasNextPage] = useState(false); // 次のページが存在するか
-  const [cookies] = useCookies(); // クッキーからトークンを取得する cookies.token にトークンが保存されている
+  const [cookies] = useCookies(['token']); // クッキーからトークンを取得する cookies.token にトークンが保存されている
   const itemsPerPage = 10; // 1ページに表示する件数
   const navigate = useNavigate();
+
+  // 書籍が選択されたときのハンドラー関数
+  const handleBookClick = (bookId) => {
+    // ログを送信
+    if (cookies.token) {
+      axios
+        .post(
+          `${url}/logs`,
+          { selectBookId: bookId },
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        )
+        .then(() => {
+          console.log('Log sent successfully');
+        })
+        .catch((err) => {
+          console.error('Error sending log:', err);
+        });
+    }
+    // 詳細画面へ遷移
+    navigate(`/detail/${bookId}`);
+  };
 
   // コンポーネントがレンダリングされた際に一度だけ実行される
   useEffect(() => {
@@ -70,7 +95,7 @@ export const Home = () => {
           </div>
         )}
         {errorMessage && <p className="book-reviews__error">{errorMessage}</p>}
-        <BookList books={books} />
+        <BookList books={books} onBookClick={handleBookClick} />
         <Pagination
           currentPage={currentPage}
           hasNextPage={hasNextPage}
