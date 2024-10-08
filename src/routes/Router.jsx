@@ -9,6 +9,7 @@ import { SignIn } from '../pages/SignIn';
 import { Profile } from '../pages/Profile';
 import { NewReview } from '../pages/NewReview';
 import { BookDetail } from '../pages/BookDetail';
+import { EditReview } from '../pages/EditReview';
 
 export const Router = () => {
   return (
@@ -22,6 +23,7 @@ export const Router = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/new" element={<NewReview />} />
           <Route path="/detail/:id" element={<BookDetail />} />
+          <Route path="/edit/:id" element={<EditReview />} />
         </Routes>
       </BrowserRouter>
     </Provider>

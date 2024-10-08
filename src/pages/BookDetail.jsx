@@ -1,6 +1,6 @@
 // BookDetail.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { Header } from '../components/Header';
@@ -73,6 +73,12 @@ export const BookDetail = () => {
         <h3>レビュー</h3>
         <p>{book.review}</p>
         <p>レビュアー: {book.reviewer}</p>
+        {book.isMine && (
+          <div className="book-detail__edit">
+            <Link to={`/edit/${book.id}`}>編集する</Link>
+          </div>
+        )}
+        <Link to={`/`}>戻る</Link>
       </main>
     </div>
   );

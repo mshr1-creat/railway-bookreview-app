@@ -21,6 +21,12 @@ const BookList = ({ books, onBookClick }) => {
               レビュー者: {book.reviewer}
             </p>
           </Link>
+          {/* 自分の投稿の場合、編集ボタンを表示 */}
+          {book.isMine && (
+            <div className="book-reviews__edit">
+              <Link to={`/edit/${book.id}`}>編集する</Link>
+            </div>
+          )}
         </li>
       ))}
     </ul>

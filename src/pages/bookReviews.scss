@@ -3,6 +3,7 @@
     &__title {
       font-size: 2rem;
       margin-bottom: 1rem;
+      font-size: clamp(16px, 2.5vw, 32px); /* レスポンシブなフォントサイズ */
     }
     &__list {
       list-style: none;
